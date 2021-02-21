@@ -1,0 +1,147 @@
+.hud {
+	box-sizing: border-box;
+	border: solid;
+	margin-right: 0.3em;
+	flex: 1 0 0;
+    height: 100%;
+}
+
+.text::selection {
+  background: white;
+}
+
+.buttonWave {
+	border: none;
+  	color: white;
+  	padding: 0.2em 0.7em;
+  	text-align: center;
+  	display: inline-block;
+  	font-size: 1.2em;
+  	margin: 0.1em, 0em;
+  	cursor: pointer;
+  	outline: none;
+  	background: #3F3F3F;
+  	margin-left: 25%;
+  	transition-duration: 0.3s;
+}
+
+.buttonWave:hover {
+	transition-duration: 0.3s;
+	background-color: green;
+
+}
+
+.buttonUpgrades {
+  border: none;
+    color: white;
+    padding: 0.4em 0.7em;
+    text-align: center;
+    display: inline-block;
+    font-size: 1.2em;
+    margin: 0.1em, 0em;
+    cursor: pointer;
+    outline: none;
+    background: #3F3F3F;
+    margin-left: 25%;
+    transition-duration: 0.3s;
+}
+
+.buttonUpgrades:hover {
+  transition-duration: 0.3s;
+  background-color: #edb818;
+
+}
+
+.displayMouthshot {
+  
+}
+
+body {
+	display: flex;
+	flex-wrap: nowrap;
+	font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+}
+
+canvas {
+	background: #DFDFDF; 
+	border: solid; 
+	border-width: 0.2em; 
+	flex: 0 1 auto;
+	border-color: #555555;
+}
+
+progress {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 50%;
+  content: "0%";
+}
+
+h2 { 
+	margin-left: 0em;
+	margin-bottom: 0em;
+	font-size: 1.8em;
+	margin-top: 0.5em;
+	text-align: center;
+}
+
+.health::-webkit-progress-bar {
+  	background: white;
+  	border-style: solid;
+  	border-color: #EE0000;
+  	border-width: 0.2em;
+  	margin-left: 0.6em;
+  	height: 1.4em;
+}
+
+.health::-webkit-progress-value {
+  	background-color: #EE0000;
+}
+
+.sprint::-webkit-progress-bar {
+    background: white;
+    border-style: solid;
+    border-color: #08bdbd;
+    border-width: 0.2em;
+    margin-left: 0.6em;
+    height: 1.4em;
+}
+
+.sprint::-webkit-progress-value {
+    background-color: #08bdbd;
+}
+
+.magazine::-webkit-progress-bar {
+    background: white;
+    border-style: solid;
+    border-color: #5e5e5e;
+    border-width: 0.2em;
+    margin-left: 0.6em;
+    height: 1.4em;
+}
+
+.magazine::-webkit-progress-value {
+    background-color: #5e5e5e;
+}
+
+.experence::-webkit-progress-bar {
+    background: white;
+    border-style: solid;
+    border-color: #edb818;
+    border-width: 0.2em;
+    margin-left: 0.6em;
+    height: 1.4em;
+}
+
+.experence::-webkit-progress-value {
+    background-color: #edb818;
+}
+
+.preload * {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  -o-transition: none !important;
+ }

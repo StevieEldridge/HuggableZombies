@@ -1,0 +1,253 @@
+.upgradePoints {
+	margin-top: 0em;
+	margin-bottom: 1em;
+	font-family: "Bungee";
+	color: #edb818;
+	font-size: 2.5em;
+	text-align: center;
+}
+
+.stats {
+  font-size: 1.2em;
+  float: left;
+  height: 97%;
+  width: 17em;
+  border: solid;
+  border-width: 5px;
+  border-color: black;
+  padding: 0.2em;
+  padding-left: 1em;
+  padding-right: 1em;
+  margin-right: 1em;
+}
+
+.storedArmor {
+  font-size: 1.0em;
+  float: right;
+  height: 97%;
+  width: 20.4em;
+  border: solid;
+  border-width: 5px;
+  border-color: black;
+  padding: 0.2em;
+  margin-left: 1em;
+  overflow: auto;
+}
+
+.main {
+  width: calc(100% - 47.7em);
+  float: left;
+  overflow: auto;
+  height: 97%;
+  border: solid;
+  border-width: 5px;
+  border-color: black;
+  user-select: none;
+}
+
+
+.armorColumn {
+  display: flex;
+  height: 5em;
+  border-radius: 15px;
+  border: solid;
+  border-width: 2px;
+  margin: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.armorColumnLeft {
+  box-sizing: border-box;
+  font-family: "Bungee";
+  width: 25%;
+  padding: 5px;
+  text-align: center;
+  border-right: solid;
+  border-width: 1px;
+}
+
+.armorLevel {
+  font-size: 2.4em;
+  margin-top: -0.7em;
+  margin-bottom: -1em;
+}
+
+.armorType {
+  font-size: 1.2em;
+  margin-top: -0.2em;
+}
+
+.armorColumnMiddle {
+  box-sizing: border-box;
+  font-size: 1.2em;
+  width: 60%;
+  padding-left: 5px;
+  padding-top: 0.9em;
+  border-right: solid;
+  border-width: 1px;
+
+}
+
+.armorColumnRight {
+  width: 15%;
+}
+
+.dropGear {
+  width: 100%;
+  height: 100%;
+  border: none;
+  font-size: 2em;
+  background: #dedede;
+  border-top-right-radius: 13px;
+  border-bottom-right-radius: 13px;
+  color: black;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  background-color: #dedede;
+}
+
+.dropGear:hover {
+  transition-duration: 0.3s;
+  background-color: #eb4034;
+  color: #4f0500;
+}
+
+.subMain {
+	flex: 1 1 0;
+  float: left;
+  display: flex;
+  width: 100%;
+  height: 100%
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.columnPlayer {
+	width: 80%;
+  padding-left: 10%;
+  padding-right: 10%
+	height: 20em;
+	float: left;
+	text-align: center;
+}
+
+.column {
+  width: 40%;
+  height: 30em;
+  float: left;
+  text-align: center;
+  padding-left: 10%;
+}
+
+.progressBackground {
+  width: 80%;
+  border: solid;
+  border-width: 2px;
+  background-color: #ffc9c9;
+  display: inline-block;
+  height: 1.2em;
+  float: left;
+  margin-right: 0.1em;
+}
+
+.progressForeground {
+  height: 1.2em;
+  background-color: #e63e3e;
+  line-height: 1.2em;
+  color: black;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.list {
+	text-align: left;
+	font-size: 1.5em;
+}
+
+.stat {
+  margin-bottom: 0.8em;
+  height: 1em;
+}
+
+.heading {
+	font-family: "Bungee";
+	font-size: 2em;
+}
+
+.buttonGoBack {
+  border: none;
+  color: white;
+  padding: 0.4em 0.7em;
+  text-align: center;
+  display: inline-block;
+  font-size: 1.6em;
+  margin: 0.1em, 0em;
+  cursor: pointer;
+  outline: none;
+  background: #3F3F3F;
+  margin-left: 25%;
+  transition-duration: 0.3s;
+}
+
+.buttonGoBack:hover {
+  transition-duration: 0.3s;
+  background-color: #edb818;
+
+}
+
+.buttonList {
+  border: none;
+  color: white;
+  padding: 0.4em 0.7em;
+  display: inline-block;
+  font-size: 0.6em;
+  cursor: pointer;
+  outline: none;
+  background: #3F3F3F;
+  transition-duration: 0.3s;
+  height: 2.3em;
+}
+
+.buttonList:hover {
+  transition-duration: 0.3s;
+  background-color: #edb818;
+
+}
+
+.buttonSelect {
+  border: none;
+  color: white;
+  padding: 0.4em 0.7em;
+  display: inline-block;
+  text-align: center;
+  font-size: 1em;
+  margin: 0.1em, 0em;
+  cursor: pointer;
+  outline: none;
+  background: #3F3F3F;
+  margin-top: 0.5em;
+  transition-duration: 0.3s;
+}
+
+.buttonSelect:hover {
+  transition-duration: 0.3s;
+  background-color: #edb818;
+
+}
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	background: #dedede;
+  flex: 1 1 0;
+  flex-wrap: nowrap;
+  flex-direction: horizontal;
+}
+
+progress {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 50%;
+  content: "0%";
+}
