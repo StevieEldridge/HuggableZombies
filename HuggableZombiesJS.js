@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $("body").removeClass("preload");
+	$("body").removeClass("preload");
 });
 
 var gameWidth = gameArea.width = (window.innerWidth * 0.86) - 50;
@@ -104,8 +104,12 @@ else {
 	saveData();
 }
 
-var playerArmor = helmet.getDamageReductionModifier() + chestplate.getDamageReductionModifier() + 
-			leggings.getDamageReductionModifier() + boots.getDamageReductionModifier();
+var playerMeleeArmor = helmet.getMeleeReductionModifier() + chestplate.getMeleeReductionModifier() +
+	leggings.getMeleeReductionModifier() + boots.getMeleeReductionModifier();
+var playerRangedArmor = helmet.getRangedReductionModifier() + chestplate.getRangedReductionModifier() +
+	leggings.getRangedReductionModifier() + boots.getRangedReductionModifier();
+var playerAreaArmor = helmet.getAreaReductionModifier() + chestplate.getAreaReductionModifier() +
+	leggings.getAreaReductionModifier() + boots.getAreaReductionModifier();
 
 var z = new Array(2000); //Array that stores zombie objects from the Zombie class
 var m = new Array(10000); //Array that stores marshmellow projectiles from the Marshmellow class
@@ -115,30 +119,30 @@ var waveCurrentlyGoing = false;
 var spawningZombies;
 
 //Array that stores data about each zombie type.  Each value in the innerarray is as follows:
-//Spawn chance, first wave, last wave, name, health, damage, speed, size, difficulty, color, attack type, ranged damage, prefered distance, fire rate
+//Spawn chance, first wave, last wave, name, health, damage, speed, size, difficulty, color, movement type, ranged damage, preferred distance, fire rate, path type, damage type
 var zombieData = [
-	[0, 1, 20, "basicZombieGreen", 100, 1, 10 * scale, 0.8 * scale, 1, "green", "melee", 0, 0, 0], 
-	[0, 4, 25, "smallZombieGreen", 120, 0.7, 12 * scale, 0.6 * scale, 2, "#009e00", "melee", 0, 0, 0], 
-	[0, 7, 35, "largeZombieGreen", 450, 1.2, 8.5 * scale, 1.1 * scale, 4, "#006300", "melee", 0, 0, 0],
-	[0, 11, 30, "spitZombieGreen", 160, 0.5, 6 * scale, 0.7 * scale, 7, "#34b34b", "ranged", 30, 12, 0.7], 
-//	[0, 15, 25, "splashZombieGreen", , , , , , "#008a45", "splash", 0, 0, 0], 
-	[0, 20, 45, "basicZombieYellow", 300, 1.5, 13.0 * scale, 0.8 * scale, 14, "#c9cc00", "melee", 0, 0, 0], 
-	[0, 25, 50, "smallZombieYellow", 250, 1.3, 17.0 * scale, 0.58 * scale, 17, "#d6d91a", "melee", 0, 0, 0], 
-	[0, 30, 55, "spitZombieYellow", 350, 0.5, 8 * scale, 0.7 * scale, 20, "#f0f246", "ranged", 50, 13, 0.85], 
-	[0, 35, 60, "largeZombieYellow", 700, 2.0, 11.5 * scale, 1.15 * scale, 23, "#a6ad15", "melee", 0, 0, 0], 
-//	[0, 40, 65, "splashZombieYellow", , , , , , "#8a873f", "splash", 0, 0, 0], 
-	[0, 45, 70, "basicZombieOrange", 450, 2.5, 16.0 * scale, 0.8 * scale, 29, "#e88f00", "melee", 0, 0, 0], 
-	[0, 50, 75, "smallZombieOrange", 350, 2.0, 20.5 * scale, 0.57 * scale, 32, "#ff9d00", "melee", 0, 0, 0], 
-	[0, 55, 80, "spitZombieOrange", 475, 0.5, 10.0 * scale, 0.7 * scale, 35, "#f2b655", "ranged", 70, 14, 0.7], 
-	[0, 60, 85, "largeZombieOrange", 1100, 5.0, 14.0 * scale, 1.2 * scale, 38, "#b57000", "melee", 0, 0, 0], 
-//	[0, 65, 90, "splashZombieOrange", , , , , , "#9c763a", "splash", 0, 0, 0], 
-	[0, 70, 100, "basicZombieBlue", 600, 3.5, 20.0 * scale, 0.8 * scale, 45, "#00b6d6", "melee", 0, 0, 0], 
-	[0, 75, 100, "smallZombieBlue", 400, 2.4, 26.0 * scale, 0.56 * scale, 49, "#00d0f5", "melee", 0, 0, 0], 
-	[0, 80, 100, "spitZombieBlue", 700, 0.5, 11 * scale, 0.7 * scale, 53, "#6ba2c9", "ranged", 90, 15, 1.0], 
-	[0, 85, 100, "largeZombieBlue", 1600, 8.0, 17.0 * scale, 1.25 * scale, 57, "#00639c", "melee", 0, 0, 0],
-//	[0, 90, 100, "splashZombieBlue", , , , , , "#425a78", "splash", 0, 0, 0],  
-	[0, 100, 200, "zombogalis", , , , , , "#7c00db", "melee", 0, 0, 0], 
-	];
+	[0, 1, 20, "basicZombieGreen", 100, 1, 10 * scale, 0.8 * scale, 1, "green", "melee", 0, 0, 0, "melee"],
+	[0, 4, 25, "smallZombieGreen", 120, 0.7, 12 * scale, 0.6 * scale, 2, "#009e00", "melee", 0, 0, 0, "melee"],
+	[0, 7, 35, "largeZombieGreen", 450, 1.2, 8.5 * scale, 1.1 * scale, 4, "#006300", "melee", 0, 0, 0, "melee"],
+	[0, 11, 30, "spitZombieGreen", 160, 0.5, 6 * scale, 0.7 * scale, 7, "#34b34b", "ranged", 30, 12, 0.7, "ranged"],
+//	[0, 15, 25, "splashZombieGreen", , , , , , "#008a45", "splash", 0, 0, 0],
+	[0, 20, 45, "basicZombieYellow", 300, 1.5, 13.0 * scale, 0.8 * scale, 14, "#c9cc00", "melee", 0, 0, 0, "melee"],
+	[0, 25, 50, "smallZombieYellow", 250, 1.3, 17.0 * scale, 0.58 * scale, 17, "#d6d91a", "melee", 0, 0, 0, "melee"],
+	[0, 30, 55, "spitZombieYellow", 350, 0.5, 8 * scale, 0.7 * scale, 20, "#f0f246", "ranged", 50, 13, 0.85, "ranged"],
+	[0, 35, 60, "largeZombieYellow", 700, 2.0, 11.5 * scale, 1.15 * scale, 23, "#a6ad15", "melee", 0, 0, 0, "melee"],
+//	[0, 40, 65, "splashZombieYellow", , , , , , "#8a873f", "splash", 0, 0, 0],
+	[0, 45, 70, "basicZombieOrange", 450, 2.5, 16.0 * scale, 0.8 * scale, 29, "#e88f00", "melee", 0, 0, 0, "melee"],
+	[0, 50, 75, "smallZombieOrange", 350, 2.0, 20.5 * scale, 0.57 * scale, 32, "#ff9d00", "melee", 0, 0, 0, "melee"],
+	[0, 55, 80, "spitZombieOrange", 475, 0.5, 10.0 * scale, 0.7 * scale, 35, "#f2b655", "ranged", 70, 14, 0.7, "ranged"],
+	[0, 60, 85, "largeZombieOrange", 1100, 5.0, 14.0 * scale, 1.2 * scale, 38, "#b57000", "melee", 0, 0, 0, "melee"],
+//	[0, 65, 90, "splashZombieOrange", , , , , , "#9c763a", "splash", 0, 0, 0],
+	[0, 70, 100, "basicZombieBlue", 600, 3.5, 20.0 * scale, 0.8 * scale, 45, "#00b6d6", "melee", 0, 0, 0, "melee"],
+	[0, 75, 100, "smallZombieBlue", 400, 2.4, 26.0 * scale, 0.56 * scale, 49, "#00d0f5", "melee", 0, 0, 0, "melee"],
+	[0, 80, 100, "spitZombieBlue", 700, 0.5, 11 * scale, 0.7 * scale, 53, "#6ba2c9", "ranged", 90, 15, 1.0, "ranged"],
+	[0, 85, 100, "largeZombieBlue", 1600, 8.0, 17.0 * scale, 1.25 * scale, 57, "#00639c", "melee", 0, 0, 0, "melee"],
+//	[0, 90, 100, "splashZombieBlue", , , , , , "#425a78", "splash", 0, 0, 0],
+	[0, 100, 200, "zombogalis", null, null, null, null, null, "#7c00db", "melee", 0, 0, 0],
+];
 
 var movingUp = false;
 var movingDown = false;
@@ -273,17 +277,17 @@ function update() {
 	currentFireDelay -= 1000 / frameRate;
 	autoFire();
 	calculatePlayerSpeed();
- 	trackPlayer();
- 	collisionDectection();
- 	projectileManagement();
- 	world.Step(1 / frameRate, 10, 10);
- 	world.DrawDebugData();
- 	world.ClearForces();
- 	gameArea.getContext("2d").clearRect(0, 0, gameArea.width, gameArea.height);
- 	render();
- 	if (currentlyReloading) {
- 		reload();
- 	}
+	trackPlayer();
+	collisionDectection();
+	projectileManagement();
+	world.Step(1 / frameRate, 10, 10);
+	world.DrawDebugData();
+	world.ClearForces();
+	gameArea.getContext("2d").clearRect(0, 0, gameArea.width, gameArea.height);
+	render();
+	if (currentlyReloading) {
+		reload();
+	}
 }
 
 function updateProgressBars() {
@@ -330,14 +334,13 @@ function trackPlayer() {
 				var multiplier = 0.0; // Used to set the less needed axis velocity to a fraction of the most needed
 				var offset = 0.0;  // Used to reduce x and y velocity with diaginal movement.  0 with no slope 1 with 45 degree slope
 
-				//Calulates the speed decrease multiplyer based on how much time they have hugged the player
-				if (z[i].hugTime >= z[i].maxHugTime) {
+				//Calculates the speed decrease multiplyer based on how much time they have hugged the player
+				if (z[i].hugSlowed) {
 					var hugTimeSpeedMulti = 1 - z[i].hugSlowdown;
 				}
 				else {
-					var hugTimeSpeedMulti = 1 - ((z[i].hugTime / z[i].maxHugTime) * z[i].hugSlowdown);
+					var hugTimeSpeedMulti = 1;
 				}
-				
 
 				var xaxis = z[i].body.GetWorldCenter().x - player.GetWorldCenter().x;
 				var yaxis = z[i].body.GetWorldCenter().y - player.GetWorldCenter().y;
@@ -413,22 +416,22 @@ function trackPlayer() {
 }
 
 function calculatePlayerSpeed() {
-	var currentPlayerSpeed = (playerSpeed * (1 + helmet.getMovementSpeedModifier() + chestplate.getMovementSpeedModifier() + 
-			leggings.getMovementSpeedModifier() + boots.getMovementSpeedModifier())) * scale;
+	var currentPlayerSpeed = (playerSpeed * (1 + helmet.getMovementSpeedModifier() + chestplate.getMovementSpeedModifier() +
+		leggings.getMovementSpeedModifier() + boots.getMovementSpeedModifier())) * scale;
 
 	//Speeds the player up when moving in that direction.
 	if (playerHealth != 0 && spacePressed && playerSprint > 0) {  //Sprints if they have sprint left and if the space bar is held
 		if (movingUp) {
-			player.ApplyForce(new b2Vec2(0, -1 * currentPlayerSpeed * playerAcceleration * playerSprintMulti), player.GetWorldCenter()); 
+			player.ApplyForce(new b2Vec2(0, -1 * currentPlayerSpeed * playerAcceleration * playerSprintMulti), player.GetWorldCenter());
 		}
 		if (movingDown) {
-			player.ApplyForce(new b2Vec2(0, currentPlayerSpeed * playerAcceleration * playerSprintMulti), player.GetWorldCenter()); 
+			player.ApplyForce(new b2Vec2(0, currentPlayerSpeed * playerAcceleration * playerSprintMulti), player.GetWorldCenter());
 		}
 		if (movingLeft) {
-			player.ApplyForce(new b2Vec2(-1 * currentPlayerSpeed * playerAcceleration * playerSprintMulti, 0), player.GetWorldCenter()); 
+			player.ApplyForce(new b2Vec2(-1 * currentPlayerSpeed * playerAcceleration * playerSprintMulti, 0), player.GetWorldCenter());
 		}
 		if (movingRight) {
-			player.ApplyForce(new b2Vec2(currentPlayerSpeed * playerAcceleration * playerSprintMulti, 0), player.GetWorldCenter()); 
+			player.ApplyForce(new b2Vec2(currentPlayerSpeed * playerAcceleration * playerSprintMulti, 0), player.GetWorldCenter());
 		}
 
 		//Reduces the players sprint
@@ -438,80 +441,80 @@ function calculatePlayerSpeed() {
 	}
 	else if (playerHealth != 0){
 		if (movingUp) {
-			player.ApplyForce(new b2Vec2(0, -1 * currentPlayerSpeed * playerAcceleration), player.GetWorldCenter()); 
+			player.ApplyForce(new b2Vec2(0, -1 * currentPlayerSpeed * playerAcceleration), player.GetWorldCenter());
 		}
 		if (movingDown) {
-			player.ApplyForce(new b2Vec2(0, currentPlayerSpeed * playerAcceleration), player.GetWorldCenter()); 
+			player.ApplyForce(new b2Vec2(0, currentPlayerSpeed * playerAcceleration), player.GetWorldCenter());
 		}
 		if (movingLeft) {
-			player.ApplyForce(new b2Vec2(-1 * currentPlayerSpeed * playerAcceleration, 0), player.GetWorldCenter()); 
+			player.ApplyForce(new b2Vec2(-1 * currentPlayerSpeed * playerAcceleration, 0), player.GetWorldCenter());
 		}
 		if (movingRight) {
-			player.ApplyForce(new b2Vec2(currentPlayerSpeed * playerAcceleration, 0), player.GetWorldCenter()); 
+			player.ApplyForce(new b2Vec2(currentPlayerSpeed * playerAcceleration, 0), player.GetWorldCenter());
 		}
 	}
-	else {	
+	else {
 	}
 
 	//Slows the player down if not moving in that direction
 	if (!movingUp && (player.GetLinearVelocity().y * Math.PI) < 0 || movingUp && movingDown && (player.GetLinearVelocity().y * Math.PI) < 0) {
-		player.ApplyImpulse(new b2Vec2(0, currentPlayerSpeed * playerAcceleration / frameRate), player.GetWorldCenter()); 
+		player.ApplyImpulse(new b2Vec2(0, currentPlayerSpeed * playerAcceleration / frameRate), player.GetWorldCenter());
 		if (player.GetLinearVelocity().y * Math.PI > 0) {
 			player.SetLinearVelocity(new b2Vec2(player.GetLinearVelocity().x * Math.PI, 0));
 		}
 	}
 	if (!movingDown && (player.GetLinearVelocity().y * Math.PI) > 0 || movingUp && movingDown && (player.GetLinearVelocity().y * Math.PI) > 0) {
-		player.ApplyImpulse(new b2Vec2(0, -1 * currentPlayerSpeed * playerAcceleration / frameRate), player.GetWorldCenter()); 
+		player.ApplyImpulse(new b2Vec2(0, -1 * currentPlayerSpeed * playerAcceleration / frameRate), player.GetWorldCenter());
 		if (player.GetLinearVelocity().y * Math.PI < 0) {
 			player.SetLinearVelocity(new b2Vec2(player.GetLinearVelocity().x * Math.PI, 0));
 		}
 	}
 	if (!movingLeft && (player.GetLinearVelocity().x * Math.PI) < 0 || movingLeft && movingRight && (player.GetLinearVelocity().x * Math.PI) < 0) {
-		player.ApplyImpulse(new b2Vec2(currentPlayerSpeed * playerAcceleration / frameRate, 0), player.GetWorldCenter()); 
+		player.ApplyImpulse(new b2Vec2(currentPlayerSpeed * playerAcceleration / frameRate, 0), player.GetWorldCenter());
 		if (player.GetLinearVelocity().x * Math.PI > 0) {
 			player.SetLinearVelocity(new b2Vec2(0, player.GetLinearVelocity().y * Math.PI));
 		}
 	}
 	if (!movingRight && (player.GetLinearVelocity().x * Math.PI) > 0 || movingLeft && movingRight && (player.GetLinearVelocity().x * Math.PI) > 0) {
-		player.ApplyImpulse(new b2Vec2(-1 * currentPlayerSpeed * playerAcceleration / frameRate, 0), player.GetWorldCenter()); 
+		player.ApplyImpulse(new b2Vec2(-1 * currentPlayerSpeed * playerAcceleration / frameRate, 0), player.GetWorldCenter());
 		if (player.GetLinearVelocity().x * Math.PI < 0) {
 			player.SetLinearVelocity(new b2Vec2(0, player.GetLinearVelocity().y * Math.PI));
 		}
 	}
 
 	//Adds a counter velocity if needed to ensure that player velocity will not exceed playerSpeed
-/*	  if (spacePressed && playerSprint > 0) { //If running, calculates using running speed
-		if (Math.abs((player.GetLinearVelocity().x * Math.PI)) > playerSpeed * playerSprintMulti) {
-			var minusVelocity = playerSpeed * playerSprintMulti - Math.abs((player.GetLinearVelocity().x * Math.PI));
-			if ((player.GetLinearVelocity().x * Math.PI) > 0)
-				player.ApplyImpulse(new b2Vec2(minusVelocity, 0), player.GetWorldCenter());
-			else
-				player.ApplyImpulse(new b2Vec2(-1 * minusVelocity, 0), player.GetWorldCenter());
-		}
-		if (Math.abs((player.GetLinearVelocity().y * Math.PI)) > playerSpeed * playerSprintMulti) {
-			var minusVelocity = playerSpeed * playerSprintMulti - Math.abs((player.GetLinearVelocity().y * Math.PI));
-			if ((player.GetLinearVelocity().y * Math.PI) > 0)
-				player.ApplyImpulse(new b2Vec2(0, minusVelocity), player.GetWorldCenter());
-			else
-				player.ApplyImpulse(new b2Vec2(0, -1 * minusVelocity), player.GetWorldCenter());
-		}
-	}
-	else { //If not running, caculates just with playerSpeed
-		if (Math.abs((player.GetLinearVelocity().x * Math.PI)) > playerSpeed) {
-			var minusVelocity = playerSpeed - Math.abs((player.GetLinearVelocity().x * Math.PI));
-			if ((player.GetLinearVelocity().x * Math.PI) > 0)
-				player.ApplyImpulse(new b2Vec2(minusVelocity, 0), player.GetWorldCenter());
-			else
-				player.ApplyImpulse(new b2Vec2(-1 * minusVelocity, 0), player.GetWorldCenter());
-		}
-		if (Math.abs((player.GetLinearVelocity().y * Math.PI)) > playerSpeed) {
-			var minusVelocity = playerSpeed - Math.abs((player.GetLinearVelocity().y * Math.PI));
-			if ((player.GetLinearVelocity().y * Math.PI) > 0)
-				player.ApplyImpulse(new b2Vec2(0, minusVelocity), player.GetWorldCenter());
-			else
-				player.ApplyImpulse(new b2Vec2(0, -1 * minusVelocity), player.GetWorldCenter());
-		}
-	} */
+	/*	  if (spacePressed && playerSprint > 0) { //If running, calculates using running speed
+            if (Math.abs((player.GetLinearVelocity().x * Math.PI)) > playerSpeed * playerSprintMulti) {
+                var minusVelocity = playerSpeed * playerSprintMulti - Math.abs((player.GetLinearVelocity().x * Math.PI));
+                if ((player.GetLinearVelocity().x * Math.PI) > 0)
+                    player.ApplyImpulse(new b2Vec2(minusVelocity, 0), player.GetWorldCenter());
+                else
+                    player.ApplyImpulse(new b2Vec2(-1 * minusVelocity, 0), player.GetWorldCenter());
+            }
+            if (Math.abs((player.GetLinearVelocity().y * Math.PI)) > playerSpeed * playerSprintMulti) {
+                var minusVelocity = playerSpeed * playerSprintMulti - Math.abs((player.GetLinearVelocity().y * Math.PI));
+                if ((player.GetLinearVelocity().y * Math.PI) > 0)
+                    player.ApplyImpulse(new b2Vec2(0, minusVelocity), player.GetWorldCenter());
+                else
+                    player.ApplyImpulse(new b2Vec2(0, -1 * minusVelocity), player.GetWorldCenter());
+            }
+        }
+        else { //If not running, caculates just with playerSpeed
+            if (Math.abs((player.GetLinearVelocity().x * Math.PI)) > playerSpeed) {
+                var minusVelocity = playerSpeed - Math.abs((player.GetLinearVelocity().x * Math.PI));
+                if ((player.GetLinearVelocity().x * Math.PI) > 0)
+                    player.ApplyImpulse(new b2Vec2(minusVelocity, 0), player.GetWorldCenter());
+                else
+                    player.ApplyImpulse(new b2Vec2(-1 * minusVelocity, 0), player.GetWorldCenter());
+            }
+            if (Math.abs((player.GetLinearVelocity().y * Math.PI)) > playerSpeed) {
+                var minusVelocity = playerSpeed - Math.abs((player.GetLinearVelocity().y * Math.PI));
+                if ((player.GetLinearVelocity().y * Math.PI) > 0)
+                    player.ApplyImpulse(new b2Vec2(0, minusVelocity), player.GetWorldCenter());
+                else
+                    player.ApplyImpulse(new b2Vec2(0, -1 * minusVelocity), player.GetWorldCenter());
+            }
+        } */
 
 	//Reduces the players speed when moving diagonally
 	if (spacePressed && playerSprint > 0) {
@@ -546,15 +549,20 @@ function collisionDectection() {
 
 			//Determines if the zombie is touching the player
 			if (distance < playerSize + z[i].size) {
-				damagePlayer(z[i].damage);
+				damagePlayer(z[i].damage, z[i].damageType);
 				z[i].hugTime += 1.0 / frameRate; //Adds to the zombies hug time
+				// Slows the zombie if the max hugtime has been exceeded
+				if (z[i].hugTime >= z[i].maxHugTime) {
+					z[i].hugSlowed = true;
+				}
 			}
 			else {
 				// The zombie's hugtime decays if it is not touching the player
-				if (z[i].hugTime >= 0 + (1.0 / frameRate)) {
+				if (z[i].hugTime >= (1.0 / frameRate) * z[i].hugDecaySpeed) {
 					z[i].hugTime -= (1.0 / frameRate) * z[i].hugDecaySpeed;
 				}
 				else {
+					z[i].hugSlowed = false;
 					z[i].hugTime = 0;
 				}
 			}
@@ -604,7 +612,7 @@ function collisionDectection() {
 								z[a].health -= m[b].damage; //Normal damage
 							}
 						}
-						
+
 
 						//Destroys the marshmellow if it is not a sniper shot
 						if (marshmellowMode != "sniper") {
@@ -617,7 +625,7 @@ function collisionDectection() {
 							//The zombie has a chance of dropping an armor peice
 							if (Math.random() <= 0.04) {
 								addCanvasText(z[a], "Dropped Armor"); //Runs the function responsible for adding displayed canvas text
-								generateArmor();
+								generateArmor(wave);
 							}
 
 							gainExperence(z[a].experence);
@@ -656,7 +664,7 @@ function collisionDectection() {
 		if (p[b] != "fed") {
 			distance = Math.sqrt(Math.pow(p[b].body.GetWorldCenter().x - player.GetWorldCenter().x, 2) + Math.pow(p[b].body.GetWorldCenter().y - player.GetWorldCenter().y, 2));
 			if (distance <= playerSize + p[b].size) {
-				playerHealth -= p[b].damage;
+				damagePlayer(p[b].damage, "ranged");
 				updateProgressBars();
 
 				//Destroys the projectile
@@ -669,20 +677,20 @@ function collisionDectection() {
 	//Damages the player if they leave the game area
 	if (player.GetWorldCenter().x - playerSize < 0) {
 		var amountOutside = (player.GetWorldCenter().x - playerSize) * -1;
-		damagePlayer(amountOutside * 80 / 60);
-		
+		damagePlayer(amountOutside * 80 / 60, "melee");
+
 	}
 	else if (player.GetWorldCenter().x + playerSize > gameWidth / 30) {
 		var amountOutside = (player.GetWorldCenter().x + playerSize) - gameWidth / 30;
-		damagePlayer(amountOutside * 80 / 60);
+		damagePlayer(amountOutside * 80 / 60, "melee");
 	}
 	else if (player.GetWorldCenter().y - playerSize < 0) {
 		var amountOutside = (player.GetWorldCenter().y - playerSize) * -1;
-		damagePlayer(amountOutside * 80 / 60);
+		damagePlayer(amountOutside * 80 / 60, "melee");
 	}
 	else if (player.GetWorldCenter().y + playerSize > gameHeight / 30) {
 		var amountOutside = (player.GetWorldCenter().y + playerSize) - gameHeight / 30;
-		damagePlayer(amountOutside * 80 / 60);
+		damagePlayer(amountOutside * 80 / 60, "melee");
 	}
 	else {
 
@@ -694,7 +702,7 @@ function collisionDectection() {
 	}
 }
 
-function generateArmor() {
+function generateArmor(waveNum) {
 	var sa = 0;
 	var typeChoice = Math.random();
 	//Finds the next avalible spot in the storedArmor array
@@ -712,33 +720,33 @@ function generateArmor() {
 	if (typeChoice >= 0.75) {
 		//Generates heavy or light armor
 		if (Math.random() >= 0.5)
-			storedArmor[sa] = new Armor(wave, "common", "head", "Heavy");
+			storedArmor[sa] = new Armor(waveNum, "common", "head", "Heavy");
 		else
-			storedArmor[sa] = new Armor(wave, "common", "head", "Light");
+			storedArmor[sa] = new Armor(waveNum, "common", "head", "Light");
 	}
 	else if (typeChoice >= 0.5) {
 		//Generates heavy or light armor
 		if (Math.random() >= 0.5)
-			storedArmor[sa] = new Armor(wave, "common", "chest", "Heavy");
+			storedArmor[sa] = new Armor(waveNum, "common", "chest", "Heavy");
 		else
-			storedArmor[sa] = new Armor(wave, "common", "chest", "Light");
+			storedArmor[sa] = new Armor(waveNum, "common", "chest", "Light");
 	}
 	else if (typeChoice >= 0.25) {
 		//Generates heavy or light armor
 		if (Math.random() >= 0.5)
-			storedArmor[sa] = new Armor(wave, "common", "legs", "Heavy");
+			storedArmor[sa] = new Armor(waveNum, "common", "legs", "Heavy");
 		else
-			storedArmor[sa] = new Armor(wave, "common", "legs", "Light");
+			storedArmor[sa] = new Armor(waveNum, "common", "legs", "Light");
 	}
 	else {
 		//Generates heavy or light armor
 		if (Math.random() >= 0.5)
-			storedArmor[sa] = new Armor(wave, "common", "feet", "Heavy");
+			storedArmor[sa] = new Armor(waveNum, "common", "feet", "Heavy");
 		else
-			storedArmor[sa] = new Armor(wave, "common", "feet", "Light");
+			storedArmor[sa] = new Armor(waveNum, "common", "feet", "Light");
 	}
 
-	//Generates the modifiers for this peice of armor
+	//Generates the modifiers for this piece of armor
 	storedArmor[sa].generateModifiers();
 }
 
@@ -805,13 +813,35 @@ function gainExperence(amount) {
 	updateProgressBars();
 }
 
-function damagePlayer(damage) {
-	if (playerHealth - damage > 0) {
-		playerHealth -= (damage * (1 - playerArmor));
+function damagePlayer(damage, damageType) {
+	if (damageType === "melee") {
+		if (playerHealth - (damage * (1 - playerMeleeArmor)) > 0) {
+			playerHealth -= (damage * (1 - playerMeleeArmor));
+		}
+		else {
+			playerHealth = 0;
+		}
+	}
+	else if (damageType === "ranged") {
+		if (playerHealth - (damage * (1 - playerRangedArmor)) > 0) {
+			playerHealth -= (damage * (1 - playerRangedArmor));
+		}
+		else {
+			playerHealth = 0;
+		}
+	}
+	else if (damageType === "area") {
+		if (playerHealth - (damage * (1 - playerAreaArmor) > 0)) {
+			playerHealth -= (damage * (1 - playerAreaArmor));
+		}
+		else {
+			playerHealth = 0;
+		}
 	}
 	else {
-		playerHealth = 0;
+		console.log("ERROR: incorrect damage type");
 	}
+
 
 	updateProgressBars();
 }
@@ -933,7 +963,7 @@ function nextWave() {
 					ySpawn = gameHeight * Math.random() / 30;
 				}
 
-				
+
 				//Decides which zombie to spawn based on the weighted odds
 				var zomChoice = Math.random() * weightedTotal;
 				var baseAdd = 0.0;
@@ -947,7 +977,7 @@ function nextWave() {
 						baseAdd += zombieData[i][0];
 					}
 				}
-				
+
 			}
 
 			//Starts spawning zombies
@@ -1014,7 +1044,7 @@ function nextWave() {
 	}
 
 	function zombieDelay() {
-		 if (waveZombies[d][0] != null && waveCurrentlyGoing) {
+		if (waveZombies[d][0] != null && waveCurrentlyGoing) {
 			createZombie(waveZombies[d][0], waveZombies[d][1], waveZombies[d][2]);
 			d++;
 		}
@@ -1039,7 +1069,7 @@ function nextWave() {
 
 		//Creates a zombie object and adds it to the world
 		if (i < z.length) {
-			z[i] = new Zombie(zombieData[type][10], zombieData[type][4], zombieData[type][5], zombieData[type][6], zombieData[type][7], zombieData[type][8], zombieData[type][12], zombieData[type][13], zombieData[type][11], xpos, ypos, zombieData[type][9], gameArea);
+			z[i] = new Zombie(zombieData[type][10], zombieData[type][4], zombieData[type][5], zombieData[type][6], zombieData[type][7], zombieData[type][8], zombieData[type][12], zombieData[type][13], zombieData[type][11], zombieData[type][14], xpos, ypos, zombieData[type][9], gameArea);
 			createZombieBody(xpos, ypos, z[i]);
 		}
 	}
@@ -1099,7 +1129,7 @@ function shootProjectile(zombieObject) {
 	var clickY = player.GetWorldCenter().y;
 	var distance  = Math.sqrt(Math.pow(zombieObject.body.GetWorldCenter().x - clickX, 2) + Math.pow(zombieObject.body.GetWorldCenter().y - clickY, 2));
 	var accuracyMulti = 1.0;
-	
+
 	//Finds the next avalible spot in the projectiles array to create a new projectile object
 	var i = 0;
 	while (i < p.length) {
@@ -1113,12 +1143,12 @@ function shootProjectile(zombieObject) {
 
 	//Only continues if there is a spot availble in the projectiles array and if the player has health
 	if (i < p.length && playerHealth > 0) {
-		
+
 		//Creates a projectile object in the projectile array
 		p[i] = new Marshmellow(zombieObject.rangedDamage, 25 * scale, 0.35 * scale, gameArea);
 		accuracyMulti = (1 - 0.6);
 
-		
+
 		//Calculates the coordinates at distance 16 from the world center accorcding to where the clicked point is
 		var outerCircleX = (16 / distance) * (clickX - zombieObject.body.GetWorldCenter().x);
 		var outerCircleY = (16 / distance) * (clickY - zombieObject.body.GetWorldCenter().y);
@@ -1178,9 +1208,9 @@ function autoFire() {
 }
 
 function shotgunCheck() {
-	if (shotgunRounds > 1) { 
+	if (shotgunRounds > 1) {
 		shootMarshmellow(shotgunLocation);
-		shotgunRounds--; 
+		shotgunRounds--;
 	}
 	//If the shotgun has a 0.5 in the shot count then it has a 50% chance to fire that extra shot
 	else if (shotgunRounds > 0.1) {
@@ -1206,7 +1236,7 @@ function shootMarshmellow(event) {
 		var clickY = (event.clientY - canvas.top) / 30;
 		var distance  = Math.sqrt(Math.pow(player.GetWorldCenter().x - clickX, 2) + Math.pow(player.GetWorldCenter().y - clickY, 2));
 		var accuracyMulti = 1.0;
-		
+
 		//Finds the next avalible spot in the marshmellow array to create a new marshmellow object
 		var i = 0;
 		while (i < m.length) {
@@ -1241,7 +1271,7 @@ function shootMarshmellow(event) {
 			else {
 				console.log("ERROR: marshmellowMode not found");
 			}
-			
+
 			//Calculates the coordinates at distance 16 from the world center accorcding to where theclicked point is
 			var outerCircleX = (16 / distance) * (clickX - player.GetWorldCenter().x);
 			var outerCircleY = (16 / distance) * (clickY - player.GetWorldCenter().y);
@@ -1321,7 +1351,7 @@ function keydown(event) {
 			break;
 		case 65: //a
 			if (!movingLeft) {
-				movingLeft = true;	
+				movingLeft = true;
 			}
 			break;
 		case 68: //d

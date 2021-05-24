@@ -1,213 +1,215 @@
 <html>
-	<head>
-		<title>Upgrades</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel = "stylesheet" href = "./UpgradesCSS.css">
-        <link href="https://fonts.googleapis.com/css?family=Bungee&display=swap" rel="stylesheet">
-	</head>
-	<body>
-		<div class = "stats">
-			<div class = "heading">Player Stats</div>
-			<div id = "MaximumHealthStat">Maximum Health: </div>
-			<div id = "DamageReductionStat">Damage Reduction: </div>
-			<br>
-			<div id = "MovementSpeedStat">Movement Speed: </div>
-			<div id = "SprintTimeStat">Sprint Time: </div>
-			<div id = "SprintSpeedMultiplyerStat">Sprint Speed Multiplyer: </div>
-			<br>
-			<div id = "MouthshotChanceStat">Mouthshot Chance: </div>
-			<div id = "MouthshotDamageMultiplyerStat">Mouthshot Multiplyer: </div>
-			<br>
-			<div id = "SightRangeStat">Sight Range: </div>
-			<br><br>
+<head>
+	<title>Upgrades</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel = "stylesheet" href = "./UpgradesCSS.css">
+	<link href="https://fonts.googleapis.com/css?family=Bungee&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class = "stats">
+	<div class = "heading">Player Stats</div>
+	<div id = "MaximumHealthStat">Maximum Health: </div>
+	<div id = "MeleeReductionStat">Melee Reduction: </div>
+	<div id = "RangedReductionStat">Ranged Reduction: </div>
+	<div id = "AreaReductionStat">AoE Reduction: </div>
+	<br>
+	<div id = "MovementSpeedStat">Movement Speed: </div>
+	<div id = "SprintTimeStat">Sprint Time: </div>
+	<div id = "SprintSpeedMultiplyerStat">Sprint Speed Multiplyer: </div>
+	<br>
+	<div id = "MouthshotChanceStat">Mouthshot Chance: </div>
+	<div id = "MouthshotDamageMultiplyerStat">Mouthshot Multiplyer: </div>
+	<br>
+	<div id = "SightRangeStat">Sight Range: </div>
+	<br><br>
 
-			<div class = "heading" id = "MarshmellowGunStats">Pistol Stats</div>
-			<div id = "CaloriesStat">Marshmellow Calories: </div>
-			<div id = "FireRateStat">Fire Rate: </div>
-			<div id = "AccuracyStat">Accuracy: </div>
-			<br>
-			<div id = "MagazineSizeStat">Magazine Size: </div>
-			<div id = "ReloadSpeedStat">Reload Speed: </div>
-			<br>
-			<div id = "MarshmellowSpeedStat">Marshmellow Speed: </div>
-			<div id = "MarshmellowSizeStat">Marshmellow Size: </div>
-		</div>
-		<div class = "main">
-			<div id = "upgradePoints" class = "upgradePoints"></div>
-			<div class = "subMain">
-				<div class = "typePlayer" style = "width: 33%; border: solid;">
-					<div class = "columnPlayer">
-						<div class = "heading">Player</div>
-						<div class = "list">
-							<div style = "margin-bottom: 0.8em">
-								<span id = "progressHealth" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonUpgradeHead" value = "Lv 1">
-							</div>
-							<div style = "margin-bottom: 0.8em">
-								<span id = "progressSpeed" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonUpgradeFeet" value = "Lv 1">
-							</div>
-							<div style = "margin-bottom: 0.8em">
-								<span id = "progressSprint" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonUpgradeLegs" value = "Lv 1">
-							</div>
-							<div style = "margin-bottom: 0.8em">
-								<span id = "progressMouthshot" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonUpgradeMouthshot" value = "Lv 1">
-							</div>
-							<div style = "margin-bottom: 0.8em">
-								<span id = "progressRange" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonUpgradeSight" value = "Lv 1">
-							</div>
-						</div>
+	<div class = "heading" id = "MarshmellowGunStats">Pistol Stats</div>
+	<div id = "CaloriesStat">Marshmellow Calories: </div>
+	<div id = "FireRateStat">Fire Rate: </div>
+	<div id = "AccuracyStat">Accuracy: </div>
+	<br>
+	<div id = "MagazineSizeStat">Magazine Size: </div>
+	<div id = "ReloadSpeedStat">Reload Speed: </div>
+	<br>
+	<div id = "MarshmellowSpeedStat">Marshmellow Speed: </div>
+	<div id = "MarshmellowSizeStat">Marshmellow Size: </div>
+</div>
+<div class = "main">
+	<div id = "upgradePoints" class = "upgradePoints"></div>
+	<div class = "subMain">
+		<div class = "typePlayer" style = "width: 33%; border: solid;">
+			<div class = "columnPlayer">
+				<div class = "heading">Player</div>
+				<div class = "list">
+					<div style = "margin-bottom: 0.8em">
+						<span id = "progressHealth" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonUpgradeHead" value = "Lv 1">
 					</div>
-					<input type = "button" class = "buttonGoBack" id = "buttonGoBack" value = "Go Back">
-				</div>
-				<div class = "typeGuns" style = "width: 66%; border: solid;">
-					<div class = "column">
-						<div class = "heading">
-							Pistol
-						</div>
-						<div class = "list">
-							<div class = "stat">
-								<span id = "progressPistolCalories" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonPistolCalories" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressPistolFireRate" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonPistolFireRate" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressPistolAccuracy" class = "progressBackground"></span>
-							</div>
-							<div class = "stat">
-								<span id = "progressPistolMagazine" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonPistolMagazine" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressPistolReloadSpeed" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonPistolReloadSpeed" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressPistolSpeed" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonPistolSpeed" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressPistolSize" class = "progressBackground"></span>
-							</div>
-						</div>
-						<input type = "button" class = "buttonSelect" id = "buttonSelectPistol" value = "Select Pistol">
+					<div style = "margin-bottom: 0.8em">
+						<span id = "progressSpeed" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonUpgradeFeet" value = "Lv 1">
 					</div>
-					<div class = "column">
-						<div class = "heading">
-							Rifle
-						</div>
-						<div class = "list">
-							<div class = "stat">
-								<span id = "progressRifleCalories" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonRifleCalories" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressRifleFireRate" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonRifleFireRate" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressRifleAccuracy" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonRifleAccuracy" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressRifleMagazine" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonRifleMagazine" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressRifleReloadSpeed" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonRifleReloadSpeed" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressRifleSpeed" class = "progressBackground"></span>
-							</div>
-							<div class = "stat">
-								<span id = "progressRifleSize" class = "progressBackground"></span>
-							</div>
-						</div>
-						<input type = "button" class = "buttonSelect" id = "buttonSelectRifle" value = "Select Rifle">
+					<div style = "margin-bottom: 0.8em">
+						<span id = "progressSprint" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonUpgradeLegs" value = "Lv 1">
 					</div>
-					<div class = "column">
-						<div class = "heading">
-							Shotgun
-						</div>
-						<div class = "list">
-							<div class = "stat">
-								<span id = "progressShotgunCalories" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonShotgunCalories" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressShotgunFireRate" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonShotgunFireRate" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressShotgunAccuracy" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonShotgunAccuracy" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressShotgunMagazine" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonShotgunMagazine" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressShotgunReloadSpeed" class = "progressBackground"></span>
-							</div>
-							<div class = "stat">
-								<span id = "progressShotgunSpeed" class = "progressBackground"></span>
-							</div>
-							<div class = "stat">
-								<span id = "progressShotgunShots" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonShotgunShots" value = "Lv 1">
-							</div>
-						</div>
-						<input type = "button" class = "buttonSelect" id = "buttonSelectShotgun" value = "Select Shotgun">
+					<div style = "margin-bottom: 0.8em">
+						<span id = "progressMouthshot" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonUpgradeMouthshot" value = "Lv 1">
 					</div>
-					<div class = "column">
-						<div class = "heading">
-							Sniper
-						</div>
-						<div class = "list">
-							<div class = "stat">
-								<span id = "progressSniperCalories" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonSniperCalories" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressSniperFireRate" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonSniperFireRate" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressSniperAccuracy" class = "progressBackground"></span>
-							</div>
-							<div class = "stat">
-								<span id = "progressSniperMagazine" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonSniperMagazine" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressSniperReloadSpeed" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonSniperReloadSpeed" value = "Lv 1">
-							</div>
-							<div class = "stat">
-								<span id = "progressSniperSpeed" class = "progressBackground"></span>
-							</div>
-							<div class = "stat">
-								<span id = "progressSniperSize" class = "progressBackground"></span>
-								<input type = "button" class = "buttonList" id = "buttonSniperSize" value = "Lv 1">
-							</div>
-						</div>
-						<input type = "button" class = "buttonSelect" id = "buttonSelectSniper" value = "Select Sniper">
+					<div style = "margin-bottom: 0.8em">
+						<span id = "progressRange" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonUpgradeSight" value = "Lv 1">
 					</div>
 				</div>
 			</div>
+			<input type = "button" class = "buttonGoBack" id = "buttonGoBack" value = "Go Back">
 		</div>
-		<div class = "storedArmor" id = "storedArmor">
-			<div class = "heading" style = "text-align: center; font-size: 2.4em;">Armor</div>
+		<div class = "typeGuns" style = "width: 66%; border: solid;">
+			<div class = "column">
+				<div class = "heading">
+					Pistol
+				</div>
+				<div class = "list">
+					<div class = "stat">
+						<span id = "progressPistolCalories" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonPistolCalories" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressPistolFireRate" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonPistolFireRate" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressPistolAccuracy" class = "progressBackground"></span>
+					</div>
+					<div class = "stat">
+						<span id = "progressPistolMagazine" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonPistolMagazine" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressPistolReloadSpeed" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonPistolReloadSpeed" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressPistolSpeed" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonPistolSpeed" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressPistolSize" class = "progressBackground"></span>
+					</div>
+				</div>
+				<input type = "button" class = "buttonSelect" id = "buttonSelectPistol" value = "Select Pistol">
+			</div>
+			<div class = "column">
+				<div class = "heading">
+					Rifle
+				</div>
+				<div class = "list">
+					<div class = "stat">
+						<span id = "progressRifleCalories" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonRifleCalories" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressRifleFireRate" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonRifleFireRate" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressRifleAccuracy" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonRifleAccuracy" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressRifleMagazine" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonRifleMagazine" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressRifleReloadSpeed" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonRifleReloadSpeed" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressRifleSpeed" class = "progressBackground"></span>
+					</div>
+					<div class = "stat">
+						<span id = "progressRifleSize" class = "progressBackground"></span>
+					</div>
+				</div>
+				<input type = "button" class = "buttonSelect" id = "buttonSelectRifle" value = "Select Rifle">
+			</div>
+			<div class = "column">
+				<div class = "heading">
+					Shotgun
+				</div>
+				<div class = "list">
+					<div class = "stat">
+						<span id = "progressShotgunCalories" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonShotgunCalories" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressShotgunFireRate" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonShotgunFireRate" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressShotgunAccuracy" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonShotgunAccuracy" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressShotgunMagazine" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonShotgunMagazine" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressShotgunReloadSpeed" class = "progressBackground"></span>
+					</div>
+					<div class = "stat">
+						<span id = "progressShotgunSpeed" class = "progressBackground"></span>
+					</div>
+					<div class = "stat">
+						<span id = "progressShotgunShots" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonShotgunShots" value = "Lv 1">
+					</div>
+				</div>
+				<input type = "button" class = "buttonSelect" id = "buttonSelectShotgun" value = "Select Shotgun">
+			</div>
+			<div class = "column">
+				<div class = "heading">
+					Sniper
+				</div>
+				<div class = "list">
+					<div class = "stat">
+						<span id = "progressSniperCalories" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonSniperCalories" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressSniperFireRate" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonSniperFireRate" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressSniperAccuracy" class = "progressBackground"></span>
+					</div>
+					<div class = "stat">
+						<span id = "progressSniperMagazine" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonSniperMagazine" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressSniperReloadSpeed" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonSniperReloadSpeed" value = "Lv 1">
+					</div>
+					<div class = "stat">
+						<span id = "progressSniperSpeed" class = "progressBackground"></span>
+					</div>
+					<div class = "stat">
+						<span id = "progressSniperSize" class = "progressBackground"></span>
+						<input type = "button" class = "buttonList" id = "buttonSniperSize" value = "Lv 1">
+					</div>
+				</div>
+				<input type = "button" class = "buttonSelect" id = "buttonSelectSniper" value = "Select Sniper">
+			</div>
 		</div>
-	</body>
-	<script src = "./classes.js"></script>
-	<script src = "./UpgradesJS.js"></script>
+	</div>
+</div>
+<div class = "storedArmor" id = "storedArmor">
+	<div class = "heading" style = "text-align: center; font-size: 2.4em;">Armor</div>
+</div>
+</body>
+<script src = "./classes.js"></script>
+<script src = "./UpgradesJS.js"></script>
 </html>

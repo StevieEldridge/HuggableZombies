@@ -48,5 +48,10 @@ Game Boarder - The edges of the game area.  If the protagonist goes outside of t
 Simply download the game files and launch the HuggableZombies.html file.
 
 ## Copyright
-Huggable Zombies is the work of Steven Eldridge and is licensed under the terms of the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0
-International License.  Read the LICENSE.txt file or go [here](https://creativecommons.org/licenses/by-nc-nd/4.0/) to learn more.
+Copyright of Steven Eldridge
+Email: eldridge33333@gmail.com
+Github:
+Huggable Zombies and all associated code except "Box2D.js" is copyright of Steven Eldridge and protected under the
+Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  You may display and share an
+unmodified version of Huggable Zombies in a non-commercial setting as long as you give me credit.
+Sharing my name, email, and providing a link to my Github page counts as sufficient credit. Go [here](https://creativecommons.org/licenses/by-nc-nd/4.0/) to learn more.

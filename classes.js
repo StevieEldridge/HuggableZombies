@@ -1,14 +1,15 @@
 class Zombie {
-	constructor(type, health, damage, speed, size, experence, preferedDistance, fireRate, rangedDamage, xpos, ypos, color, canvasName) {
+	constructor(type, health, damage, speed, size, experence, preferedDistance, fireRate, rangedDamage, damageType, xpos, ypos, color, canvasName) {
 		this.type = type;
 		this.health = health;
 		this.maxHealth = health;
 		this.damage = damage;
 		this.speed = speed;
 		this.hugTime = 0.0; //Stores the amount of time the zombie has hugged the player.  Decays when not hugging.
-		this.maxHugTime = 3.5; //The hugtime that will result in the maximum slowdown amount
-		this.hugSlowdown = 1.0; //The maximum slowdown that can occur from hugging the player in percent.
-		this.hugDecaySpeed = 0.1; //Determines how fast the hugTime decays when not hugging the player.
+		this.maxHugTime = 1.0; //The amount of hugtime that will trigger slowdown if it has been met
+		this.hugSlowdown = 0.8; //The slowdown occurs from exceeding maxHugTime in percent.
+		this.hugDecaySpeed = 1.0; //Determines how fast the hugTime decays when not hugging the player.
+		this.hugSlowed = false;
 		this.size = size;
 		this.experence = experence;
 		this.preferedDistance = preferedDistance;
@@ -20,6 +21,7 @@ class Zombie {
 		this.timeBeforeSniperEat = 0;
 		this.fireRate = fireRate;
 		this.rangedDamage = rangedDamage;
+		this.damageType = damageType;
 		this.delay = 0.0;
 		this.body; //Used to store the body object from box2d
 		this.html = "<div></div>";  //Used to store the html for health bars
@@ -27,7 +29,7 @@ class Zombie {
 
 	newPos(posX, posY, text, scale) {
 		var ctx = this.canvasName.getContext("2d");
-	    ctx.beginPath();
+		ctx.beginPath();
 		ctx.arc(posX * 30, posY * 30, this.size * 30, 0, 2 * Math.PI);
 		ctx.fillStyle = this.color;
 		ctx.fill();
@@ -161,7 +163,9 @@ class Armor {
 		this.weight = weight;
 		this.equipped = false;
 		this.healthModifier = 0.0;
-		this.damageReductionModifier = 0.0;
+		this.meleeReductionModifier = 0.0;
+		this.rangedReductionModifier = 0.0;
+		this.areaReductionModifier = 0.0;
 		this.movementSpeedModifier = 0.0;
 		this.sprintTimeModifier = 0.0;
 		this.sprintMultiModifier = 0.0;
@@ -194,8 +198,16 @@ class Armor {
 		return this.healthModifier;
 	}
 
-	getDamageReductionModifier() {
-		return this.damageReductionModifier;
+	getMeleeReductionModifier() {
+		return this.meleeReductionModifier;
+	}
+
+	getRangedReductionModifier() {
+		return this.rangedReductionModifier;
+	}
+
+	getAreaReductionModifier() {
+		return this.areaReductionModifier;
 	}
 
 	getMovementSpeedModifier() {
@@ -261,19 +273,23 @@ class Armor {
 	generateModifiers() {
 		//TODO create section for new game plus
 
-		if (this.weight == "Heavy") {
+		if (this.weight === "Heavy") {
 			this.movementSpeedModifier = -0.075;
-			this.damageReductionModifier = 0.075 + (0.00111112 * Math.min(this.level, 90));
+			this.meleeReductionModifier = 0.08 + (0.001194444 * Math.min(this.level, 90));
+			this.rangedReductionModifier = 0.15 + (0.000694444 * Math.min(this.level, 90));
+			this.areaReductionModifier = 0.05 + (0.000416667 * Math.min(this.level, 90));
 		}
-		else if (this.weight == "Light") {
+		else if (this.weight === "Light") {
 			this.movementSpeedModifier = -0.0375;
-			this.damageReductionModifier = 0.0375 + (0.00097223 * Math.min(this.level, 90));
+			this.meleeReductionModifier = 0.0375 + (0.000972223 * Math.min(this.level, 90));
+			this.rangedReductionModifier = 0.04 + (0.000388889 * Math.min(this.level, 90));
+			this.areaReductionModifier = 0.12 + (0.000611111 * Math.min(this.level, 90));
 		}
-		else if (this.weight == "empty") {
+		else if (this.weight === "empty") {
 			//Does not add any modifiers as there should be none
 		}
 		else {
-			Console.log("Error: Armor weight not valid");
+			console.log("Error: Armor weight not valid");
 		}
 	}
 }
@@ -299,14 +315,14 @@ class Marshmellow {
 
 class PlayRender {
 	constructor(size, color, canvasName) {
-	this.size = size;
-  	this.color = color;
-  	this.canvasName = canvasName;
+		this.size = size;
+		this.color = color;
+		this.canvasName = canvasName;
 	}
 
 	newPos(posX, posY) {
 		var ctx = this.canvasName.getContext("2d");
-	    ctx.beginPath();
+		ctx.beginPath();
 		ctx.arc(posX * 30, posY * 30, this.size, 0, 2 * Math.PI);
 		ctx.fillStyle = this.color;
 		ctx.fill();

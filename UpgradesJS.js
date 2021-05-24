@@ -40,8 +40,12 @@ Object.assign(chestplate, JSON.parse(localStorage.chestplate));
 Object.assign(leggings, JSON.parse(localStorage.leggings));
 Object.assign(boots, JSON.parse(localStorage.boots));
 
-var playerArmor = helmet.getDamageReductionModifier() + chestplate.getDamageReductionModifier() + 
-			leggings.getDamageReductionModifier() + boots.getDamageReductionModifier();
+var playerMeleeArmor = helmet.getMeleeReductionModifier() + chestplate.getMeleeReductionModifier() +
+	leggings.getMeleeReductionModifier() + boots.getMeleeReductionModifier();
+var playerRangedArmor = helmet.getRangedReductionModifier() + chestplate.getRangedReductionModifier() +
+	leggings.getRangedReductionModifier() + boots.getRangedReductionModifier();
+var playerAreaArmor = helmet.getAreaReductionModifier() + chestplate.getAreaReductionModifier() +
+	leggings.getAreaReductionModifier() + boots.getAreaReductionModifier();
 
 for(var a = 0; a < upgradeLevel.length; a++) {
 	for (var b = 0; b < upgradeLevel[a].length; b++) {
@@ -92,20 +96,20 @@ updateStats(returnSelectedMarshmellowGunObject());
 document.getElementById("storedArmor").innerHTML = "<div class = \"heading\" style = \"text-align: center; font-size: 2.4em;\">Armor</div>";
 for (var i = 0; i < storedArmor.length; i++) {
 	if (storedArmor[i] != null) {
-		document.getElementById("storedArmor").innerHTML += 
-				"<div class = \"armorColumn\" id = \"armorColumn" + i + "\">" +
-					"<div class = \"armorColumnLeft\" id = \"armorColumnLeft" + i + "\">" +
-						"<div class = \"armorLevel\">" + storedArmor[i].getLevel() + "</div>" +
-						"<div class = \"armorType\">" + storedArmor[i].getType() + "</div>" +
-					"</div>" +
-					"<div class = \"armorColumnMiddle\" id = \"armorColumnMiddle" + i + "\">" +
-					"<div>Weight: " + storedArmor[i].getWeight() + "</div>" +
-						"<div>Armor: " + (storedArmor[i].getDamageReductionModifier() * 100).toFixed(2) + "%</div>" +
-					"</div>" +
-					"<div class = \"armorColumnRight\">" +
-						"<input type = \"button\" class = \"dropGear\" id = \"buttonDropGear" + i + "\" value = \"X\">" +
-					"</div>" +
-				"</div>";
+		document.getElementById("storedArmor").innerHTML +=
+			"<div class = \"armorColumn\" id = \"armorColumn" + i + "\">" +
+			"<div class = \"armorColumnLeft\" id = \"armorColumnLeft" + i + "\">" +
+			"<div class = \"armorLevel\">" + storedArmor[i].getLevel() + "</div>" +
+			"<div class = \"armorType\">" + storedArmor[i].getType() + "</div>" +
+			"</div>" +
+			"<div class = \"armorColumnMiddle\" id = \"armorColumnMiddle" + i + "\">" +
+			"<div>Weight: " + storedArmor[i].getWeight() + "</div>" +
+			"<div>Armor: " + (storedArmor[i].getMeleeReductionModifier() * 100).toFixed(2) + "%</div>" +
+			"</div>" +
+			"<div class = \"armorColumnRight\">" +
+			"<input type = \"button\" class = \"dropGear\" id = \"buttonDropGear" + i + "\" value = \"X\">" +
+			"</div>" +
+			"</div>";
 	}
 }
 
@@ -331,11 +335,15 @@ function updateArmorColor() {
 }
 
 function updatePlayerArmorAndDisplaySpeed() {
-	playerArmor = helmet.getDamageReductionModifier() + chestplate.getDamageReductionModifier() + 
-			leggings.getDamageReductionModifier() + boots.getDamageReductionModifier();
+	playerMeleeArmor = helmet.getMeleeReductionModifier() + chestplate.getMeleeReductionModifier() +
+		leggings.getMeleeReductionModifier() + boots.getMeleeReductionModifier();
+	playerRangedArmor = helmet.getRangedReductionModifier() + chestplate.getRangedReductionModifier() +
+		leggings.getRangedReductionModifier() + boots.getRangedReductionModifier();
+	playerAreaArmor = helmet.getAreaReductionModifier() + chestplate.getAreaReductionModifier() +
+		leggings.getAreaReductionModifier() + boots.getAreaReductionModifier();
 
-	displaySpeed = playerSpeed * (1 + helmet.getMovementSpeedModifier() + chestplate.getMovementSpeedModifier() + 
-			leggings.getMovementSpeedModifier() + boots.getMovementSpeedModifier());
+	displaySpeed = playerSpeed * (1 + helmet.getMovementSpeedModifier() + chestplate.getMovementSpeedModifier() +
+		leggings.getMovementSpeedModifier() + boots.getMovementSpeedModifier());
 
 }
 
@@ -830,7 +838,9 @@ function returnSelectedMarshmellowGunObject() {
 
 function updateStats(marshmellowGunObject) {
 	document.getElementById("MaximumHealthStat").innerHTML = "Maximum Health: " + maxPlayerHealth.toFixed(0);
-	document.getElementById("DamageReductionStat").innerHTML = "Damage Reduction: " + (playerArmor * 100).toFixed(2) + "%";
+	document.getElementById("MeleeReductionStat").innerHTML = "Melee Reduction: " + (playerMeleeArmor * 100).toFixed(2) + "%";
+	document.getElementById("RangedReductionStat").innerHTML = "Ranged Reduction: " + (playerRangedArmor * 100).toFixed(2) + "%";
+	document.getElementById("AreaReductionStat").innerHTML = "AoE Reduction: " + (playerAreaArmor * 100).toFixed(2) + "%";
 	document.getElementById("MovementSpeedStat").innerHTML = "Movement Speed: " + displaySpeed.toFixed(2);
 	document.getElementById("SprintTimeStat").innerHTML = "Sprint Time: " + maxPlayerSprint.toFixed(1) + "s";
 	document.getElementById("SprintSpeedMultiplyerStat").innerHTML = "Sprint Speed Multiplyer: x" + playerSprintMulti.toFixed(2);
