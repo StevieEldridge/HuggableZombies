@@ -114,34 +114,35 @@ var playerAreaArmor = helmet.getAreaReductionModifier() + chestplate.getAreaRedu
 var z = new Array(2000); //Array that stores zombie objects from the Zombie class
 var m = new Array(10000); //Array that stores marshmellow projectiles from the Marshmellow class
 var p = new Array(1000); //Array that stores zombie projectiles
+var as = new Array(1000); //Array that stores AoE segments
 var text = new Array(1000); //Array that stores text displayed on the canvas
 var waveCurrentlyGoing = false;
 var spawningZombies;
 
 //Array that stores data about each zombie type.  Each value in the innerarray is as follows:
-//Spawn chance, first wave, last wave, name, health, damage, speed, size, difficulty, color, movement type, ranged damage, preferred distance, fire rate, path type, damage type
+//Spawn chance, first wave, last wave, name, health, damage, speed, size, difficulty, color, movement type, ranged damage, preferred distance, fire rate, damage type, AoE size, AoE stay time in seconds
 var zombieData = [
-	[0, 1, 20, "basicZombieGreen", 100, 1, 10 * scale, 0.8 * scale, 1, "green", "melee", 0, 0, 0, "melee"],
-	[0, 4, 25, "smallZombieGreen", 120, 0.7, 12 * scale, 0.6 * scale, 2, "#009e00", "melee", 0, 0, 0, "melee"],
-	[0, 7, 35, "largeZombieGreen", 450, 1.2, 8.5 * scale, 1.1 * scale, 4, "#006300", "melee", 0, 0, 0, "melee"],
-	[0, 11, 30, "spitZombieGreen", 160, 0.5, 6 * scale, 0.7 * scale, 7, "#34b34b", "ranged", 30, 12, 0.7, "ranged"],
-//	[0, 15, 25, "splashZombieGreen", , , , , , "#008a45", "splash", 0, 0, 0],
-	[0, 20, 45, "basicZombieYellow", 300, 1.5, 13.0 * scale, 0.8 * scale, 14, "#c9cc00", "melee", 0, 0, 0, "melee"],
-	[0, 25, 50, "smallZombieYellow", 250, 1.3, 17.0 * scale, 0.58 * scale, 17, "#d6d91a", "melee", 0, 0, 0, "melee"],
-	[0, 30, 55, "spitZombieYellow", 350, 0.5, 8 * scale, 0.7 * scale, 20, "#f0f246", "ranged", 50, 13, 0.85, "ranged"],
-	[0, 35, 60, "largeZombieYellow", 700, 2.0, 11.5 * scale, 1.15 * scale, 23, "#a6ad15", "melee", 0, 0, 0, "melee"],
-//	[0, 40, 65, "splashZombieYellow", , , , , , "#8a873f", "splash", 0, 0, 0],
-	[0, 45, 70, "basicZombieOrange", 450, 2.5, 16.0 * scale, 0.8 * scale, 29, "#e88f00", "melee", 0, 0, 0, "melee"],
-	[0, 50, 75, "smallZombieOrange", 350, 2.0, 20.5 * scale, 0.57 * scale, 32, "#ff9d00", "melee", 0, 0, 0, "melee"],
-	[0, 55, 80, "spitZombieOrange", 475, 0.5, 10.0 * scale, 0.7 * scale, 35, "#f2b655", "ranged", 70, 14, 0.7, "ranged"],
-	[0, 60, 85, "largeZombieOrange", 1100, 5.0, 14.0 * scale, 1.2 * scale, 38, "#b57000", "melee", 0, 0, 0, "melee"],
-//	[0, 65, 90, "splashZombieOrange", , , , , , "#9c763a", "splash", 0, 0, 0],
-	[0, 70, 100, "basicZombieBlue", 600, 3.5, 20.0 * scale, 0.8 * scale, 45, "#00b6d6", "melee", 0, 0, 0, "melee"],
-	[0, 75, 100, "smallZombieBlue", 400, 2.4, 26.0 * scale, 0.56 * scale, 49, "#00d0f5", "melee", 0, 0, 0, "melee"],
-	[0, 80, 100, "spitZombieBlue", 700, 0.5, 11 * scale, 0.7 * scale, 53, "#6ba2c9", "ranged", 90, 15, 1.0, "ranged"],
-	[0, 85, 100, "largeZombieBlue", 1600, 8.0, 17.0 * scale, 1.25 * scale, 57, "#00639c", "melee", 0, 0, 0, "melee"],
-//	[0, 90, 100, "splashZombieBlue", , , , , , "#425a78", "splash", 0, 0, 0],
-	[0, 100, 200, "zombogalis", null, null, null, null, null, "#7c00db", "melee", 0, 0, 0],
+	[0, 1, 20, "basicZombieGreen", 100, 60.0, 10 * scale, 0.8 * scale, 1, "green", "melee", 0, 0, 0, "melee", 0, 0],
+	[0, 4, 25, "smallZombieGreen", 120, 42.0, 12 * scale, 0.6 * scale, 2, "#009e00", "melee", 0, 0, 0, "melee", 0, 0],
+	[0, 7, 35, "largeZombieGreen", 450, 72.0, 8.5 * scale, 1.1 * scale, 4, "#006300", "melee", 0, 0, 0, "melee", 0, 0],
+	[0, 11, 30, "spitZombieGreen", 160, 30.0, 6 * scale, 0.7 * scale, 7, "#34b34b", "ranged", 30.0, 12, 0.7, "ranged", 0, 0],
+	[0, 15, 25, "lobberZombieGreen", 200, 30.0, 5 * scale, 0.8 * scale, 8, "#008a45", "lobber", 30.0, 0, 0.2, "area", 2.0 * scale, 15.0],
+	[0, 20, 45, "basicZombieYellow", 300, 90.0, 13.0 * scale, 0.8 * scale, 14, "#c9cc00", "melee", 0, 0, 0, "melee", 0, 0],
+	[0, 25, 50, "smallZombieYellow", 250, 78.0, 17.0 * scale, 0.58 * scale, 17, "#d6d91a", "melee", 0, 0, 0, "melee", 0, 0],
+	[0, 30, 55, "spitZombieYellow", 350, 30.0, 8 * scale, 0.7 * scale, 20, "#f0f246", "ranged", 45.0, 13, 0.7, "ranged", 0, 0],
+	[0, 35, 60, "largeZombieYellow", 700, 120.0, 11.5 * scale, 1.15 * scale, 23, "#a6ad15", "melee", 0, 0, 0, "melee", 0, 0],
+	[0, 40, 65, "lobberZombieYellow", 370, 30.0, 6 * scale, 0.8 * scale, 26, "#8a873f", "lobber", 45.0, 0, 0.22, "area", 2.2 * scale, 15.0],
+	[0, 45, 70, "basicZombieOrange", 450, 150.0, 16.0 * scale, 0.8 * scale, 29, "#e88f00", "melee", 0, 0, 0, "melee", 0, 0],
+	[0, 50, 75, "smallZombieOrange", 350, 120.0, 20.5 * scale, 0.57 * scale, 32, "#ff9d00", "melee", 0, 0, 0, "melee", 0, 0],
+	[0, 55, 80, "spitZombieOrange", 475, 30.0, 10.0 * scale, 0.7 * scale, 35, "#f2b655", "ranged", 60.0, 14, 0.7, "ranged", 0, 0],
+	[0, 60, 85, "largeZombieOrange", 1100, 300.0, 14.0 * scale, 1.2 * scale, 38, "#b57000", "melee", 0, 0, 0, "melee", 0, 0],
+	[0, 65, 90, "lobberZombieOrange", 500, 30.0, 7 * scale, 0.8 * scale, 41, "#9c763a", "lobber", 65.0, 0, 0.24, "area", 2.4 * scale, 15.0],
+	[0, 70, 100, "basicZombieBlue", 600, 210.0, 20.0 * scale, 0.8 * scale, 45, "#00b6d6", "melee", 0, 0, 0, "melee", 0, 0],
+	[0, 75, 100, "smallZombieBlue", 450, 144.0, 26.0 * scale, 0.56 * scale, 49, "#00d0f5", "melee", 0, 0, 0, "melee", 0, 0],
+	[0, 80, 100, "spitZombieBlue", 700, 30.0, 11 * scale, 0.7 * scale, 53, "#6ba2c9", "ranged", 75.0, 15, 0.7, "ranged", 0, 0],
+	[0, 85, 100, "largeZombieBlue", 1600, 480.0, 17.0 * scale, 1.25 * scale, 57, "#00639c", "melee", 0, 0, 0, "melee", 0, 0],
+	[0, 90, 100, "lobberZombieBlue", 800, 30.0, 8 * scale, 0.8 * scale, 60, "#425a78", "lobber", 90.0, 0, 0.26, "area", 2.6 * scale, 15.0],
+//	[0, 100, 200, "zombogalis", null, null, null, null, null, "#7c00db", "melee", 0, 0, 0],
 ];
 
 var movingUp = false;
@@ -268,25 +269,31 @@ updateProgressBars();
 
 
 
-window.setInterval(update, 1000 / frameRate);
+var updateInterval = window.setInterval(update, 1000 / frameRate);
 if (marshmellowMode == "shotgun") {
 	window.setInterval(shotgunCheck, 4);
 }
 
 function update() {
-	currentFireDelay -= 1000 / frameRate;
-	autoFire();
-	calculatePlayerSpeed();
-	trackPlayer();
-	collisionDectection();
-	projectileManagement();
-	world.Step(1 / frameRate, 10, 10);
-	world.DrawDebugData();
-	world.ClearForces();
-	gameArea.getContext("2d").clearRect(0, 0, gameArea.width, gameArea.height);
-	render();
-	if (currentlyReloading) {
-		reload();
+	try {
+		currentFireDelay -= 1000 / frameRate;
+		autoFire();
+		calculatePlayerSpeed();
+		trackPlayer();
+		collisionDetection();
+		projectileManagement();
+		world.Step(1 / frameRate, 10, 10);
+		world.DrawDebugData();
+		world.ClearForces();
+		gameArea.getContext("2d").clearRect(0, 0, gameArea.width, gameArea.height);
+		render();
+		if (currentlyReloading) {
+			reload();
+		}
+	}
+	catch (e) {
+		console.error(e);
+		clearInterval(updateInterval);
 	}
 }
 
@@ -329,7 +336,7 @@ function updateProgressBars() {
 function trackPlayer() {
 	for (var i = 0; z[i] != null; i++) {
 		if (z[i] != "fed") {
-			if (z[i].type == "melee") {
+			if (z[i].type === "melee") {
 				z[i].body.SetLinearVelocity(new b2Vec2(0, 0));
 				var multiplier = 0.0; // Used to set the less needed axis velocity to a fraction of the most needed
 				var offset = 0.0;  // Used to reduce x and y velocity with diaginal movement.  0 with no slope 1 with 45 degree slope
@@ -357,7 +364,7 @@ function trackPlayer() {
 
 				z[i].body.ApplyImpulse(new b2Vec2(-1 * multiplier * hugTimeSpeedMulti * xaxis * (1 - (0.29289 * offset)), -1 * multiplier * hugTimeSpeedMulti * yaxis * (1 - (0.29289 * offset))), z[i].body.GetWorldCenter());
 			}
-			else if (z[i].type == "ranged") {
+			else if (z[i].type === "ranged") {
 				var distance  = Math.sqrt(Math.pow(player.GetWorldCenter().x - z[i].body.GetWorldCenter().x, 2) + Math.pow(player.GetWorldCenter().y - z[i].body.GetWorldCenter().y, 2));
 				//Moves towards the player if too far away
 				if (distance > z[i].preferedDistance) {
@@ -405,8 +412,47 @@ function trackPlayer() {
 					z[i].body.SetLinearVelocity(new b2Vec2(0, 0));
 				}
 			}
-			else if (z[i].type = "splash") {
+			else if (z[i].type === "lobber") {
+				//Determines if the lobber is in position to fire
+				if (z[i].body.GetWorldCenter().x - z[i].size - 1 < 0) {
+					z[i].lobberReady = false;
+				}
+				else if (z[i].body.GetWorldCenter().x + z[i].size + 1 > gameWidth / 30) {
+					z[i].lobberReady = false;
+				}
+				else if (z[i].body.GetWorldCenter().y - z[i].size - 1 < 0) {
+					z[i].lobberReady = false;
+				}
+				else if (z[i].body.GetWorldCenter().y + z[i].size + 1 > gameHeight / 30) {
+					z[i].lobberReady = false;
+				}
+				else {
+					z[i].lobberReady = true;
+				}
 
+				// Moves the lobber if it is not ready to fire yet
+				if (!z[i].lobberReady) {
+					z[i].body.SetLinearVelocity(new b2Vec2(0, 0));
+					var multiplier = 0.0; // Used to set the less needed axis velocity to a fraction of the most needed
+					var offset = 0.0;  // Used to reduce x and y velocity with diagonal movement.  0 with no slope 1 with 45 degree slope
+
+					var xaxis = z[i].body.GetWorldCenter().x - gameWidth / 30 / 2;
+					var yaxis = z[i].body.GetWorldCenter().y - gameHeight / 30 / 2;
+
+					//Determines which axis needs more velocity and sets the multiplier accordingly
+					if (Math.abs(xaxis) <= Math.abs(yaxis)) {
+						multiplier = z[i].speed / Math.abs(yaxis);
+						offset = Math.abs(xaxis) / Math.abs(yaxis);
+					} else {
+						multiplier = z[i].speed / Math.abs(xaxis);
+						offset = Math.abs(yaxis) / Math.abs(xaxis);
+					}
+
+					z[i].body.ApplyImpulse(new b2Vec2(-1 * multiplier * xaxis * (1 - (0.29289 * offset)), -1 * multiplier * yaxis * (1 - (0.29289 * offset))), z[i].body.GetWorldCenter());
+				}
+				else {
+					z[i].body.SetLinearVelocity(new b2Vec2(0, 0));
+				}
 			}
 			else {
 				console.log("ERROR: Zombie type not found");
@@ -537,7 +583,7 @@ function calculatePlayerSpeed() {
 	}
 }
 
-function collisionDectection() {
+function collisionDetection() {
 	var pxpos = player.GetWorldCenter().x;
 	var pypos = player.GetWorldCenter().y;
 	var distance = 0;
@@ -549,7 +595,7 @@ function collisionDectection() {
 
 			//Determines if the zombie is touching the player
 			if (distance < playerSize + z[i].size) {
-				damagePlayer(z[i].damage, z[i].damageType);
+				damagePlayer(z[i].damage / frameRate, z[i].damageType);
 				z[i].hugTime += 1.0 / frameRate; //Adds to the zombies hug time
 				// Slows the zombie if the max hugtime has been exceeded
 				if (z[i].hugTime >= z[i].maxHugTime) {
@@ -573,7 +619,7 @@ function collisionDectection() {
 	for (var a = 0; z[a] != null; a++) {
 		if (z[a] != "fed") {
 			if (z[a].timeBeforeSniperEat >= z[a].timeBeforeSniperEat - 1000 / frameRate) {
-				z[a].timeBeforeSniperEat -= 1000 / frameRate
+				z[a].timeBeforeSniperEat -= 1000 / frameRate;
 			}
 			else {
 				z[a].timeBeforeSniperEat = 0;
@@ -659,19 +705,64 @@ function collisionDectection() {
 		}
 	}
 
-	//Detects if a projectile touches the player
+	//Detects if a projectile touches the player or lobber touches goal spot
 	for (var b = 0; p[b] != null; b++) {
 		if (p[b] != "fed") {
-			distance = Math.sqrt(Math.pow(p[b].body.GetWorldCenter().x - player.GetWorldCenter().x, 2) + Math.pow(p[b].body.GetWorldCenter().y - player.GetWorldCenter().y, 2));
-			if (distance <= playerSize + p[b].size) {
-				damagePlayer(p[b].damage, "ranged");
-				updateProgressBars();
+			// Calculates if a projectile touches the player
+			if (p[b].type === "ranged") {
+				distance = Math.sqrt(Math.pow(p[b].body.GetWorldCenter().x - player.GetWorldCenter().x, 2) + Math.pow(p[b].body.GetWorldCenter().y - player.GetWorldCenter().y, 2));
+				if (distance <= playerSize + p[b].size) {
+					damagePlayer(p[b].damage, "ranged");
+					updateProgressBars();
 
-				//Destroys the projectile
-				world.DestroyBody(p[b].body);
-				p[b] = "fed";
+					//Destroys the projectile
+					world.DestroyBody(p[b].body);
+					p[b] = "fed";
+				}
+			}
+			// Calculates if a lobber projectile touches the goal spot
+			else if (p[b].type === "lobber") {
+				distance = Math.sqrt(Math.pow(p[b].body.GetWorldCenter().x - p[b].finalX, 2) + Math.pow(p[b].body.GetWorldCenter().y - p[b].finalY, 2));
+				if (distance < 0.2) {
+					//Spawns the AoE zone
+					createAoESegment(p[b].damage, p[b].aoeSize, p[b].aoeTime, p[b].finalX, p[b].finalY);
+
+					//Destroys the projectile
+					world.DestroyBody(p[b].body);
+					p[b] = "fed";
+				}
 			}
 		}
+	}
+
+	//Detects if the player is in an AoE and updates the AoE time
+	var maxAoEDamage = 0; // Only damages the player by the max AoE segment damage
+	for (var b = 0; as[b] != null; b++) {
+		if (as[b] !== "fed") {
+			distance = Math.sqrt(Math.pow(as[b].body.GetWorldCenter().x - player.GetWorldCenter().x, 2) + Math.pow(as[b].body.GetWorldCenter().y - player.GetWorldCenter().y, 2));
+			//Determines if the player is in the AoE effect
+			if (distance <= playerSize + as[b].size) {
+				//Only updates the maxAoE damage if it is higher than the current segment
+				if (as[b].damage > maxAoEDamage) {
+					maxAoEDamage = as[b].damage;
+				}
+			}
+
+			//Reduces the AoE segment's remaining time
+			if (as[b].aoeTime - (1000 / frameRate / 1000.0) > 0) {
+				as[b].aoeTime -= (1000 / frameRate / 1000.0);
+			}
+			// Destroys the AoE segment if the remaining time is 0
+			else {
+				world.DestroyBody(as[b].body);
+				as[b] = "fed";
+			}
+		}
+	}
+	// Only applies AoE damage to the player if there is some AoE damage to be applied
+	if (maxAoEDamage > 0) {
+		damagePlayer(maxAoEDamage / frameRate, "area");
+		updateProgressBars();
 	}
 
 	//Damages the player if they leave the game area
@@ -751,6 +842,13 @@ function generateArmor(waveNum) {
 }
 
 function render() {
+	//Renders the AoE segments
+	for (var i = 0; as[i] != null; i++) {
+		if (as[i] != "fed") {
+			as[i].newPos(as[i].body.GetWorldCenter().x, as[i].body.GetWorldCenter().y, "#b4b6bf");
+		}
+	}
+
 	playerRender.newPos(player.GetWorldCenter().x, player.GetWorldCenter().y);
 
 	//Renders the zombies
@@ -778,7 +876,15 @@ function render() {
 	//Renders the projectiles
 	for (var i = 0; p[i] != null; i++) {
 		if (p[i] != "fed") {
-			p[i].newPos(p[i].body.GetWorldCenter().x, p[i].body.GetWorldCenter().y, "#aa58e8");
+			if (p[i].type === "ranged") {
+				p[i].newPos(p[i].body.GetWorldCenter().x, p[i].body.GetWorldCenter().y, "#aa58e8");
+			}
+			else if (p[i].type === "lobber") {
+				p[i].newPos(p[i].body.GetWorldCenter().x, p[i].body.GetWorldCenter().y, "#797a80");
+			}
+			else {
+				console.log("ERROR: Projectile type not found");
+			}
 		}
 	}
 
@@ -851,7 +957,6 @@ function addCanvasText(zombieObject, displayText) {
 	for (var i = 0; i < text.length; i++) {
 		if (text[i] == null) {
 			text[i] = new CanvasText(displayText, zombieObject.body.GetWorldCenter().x * 30, zombieObject.body.GetWorldCenter().y * 30, gameHeight * 0.1, gameArea);
-			console.log(text[i].text);
 			break;
 		}
 	}
@@ -1069,7 +1174,7 @@ function nextWave() {
 
 		//Creates a zombie object and adds it to the world
 		if (i < z.length) {
-			z[i] = new Zombie(zombieData[type][10], zombieData[type][4], zombieData[type][5], zombieData[type][6], zombieData[type][7], zombieData[type][8], zombieData[type][12], zombieData[type][13], zombieData[type][11], zombieData[type][14], xpos, ypos, zombieData[type][9], gameArea);
+			z[i] = new Zombie(zombieData[type][10], zombieData[type][4], zombieData[type][5], zombieData[type][6], zombieData[type][7], zombieData[type][8], zombieData[type][12], zombieData[type][13], zombieData[type][11], zombieData[type][14], xpos, ypos, zombieData[type][9], zombieData[type][15], zombieData[type][16], gameArea);
 			createZombieBody(xpos, ypos, z[i]);
 		}
 	}
@@ -1114,8 +1219,19 @@ function projectileManagement() {
 				z[i].delay += 1000 / frameRate;
 				//Fires if the delay is greater than the fire rate calculation
 				if (z[i].delay >= 1000 / z[i].fireRate) {
-					shootProjectile(z[i]);
+					shootProjectile(z[i], player.GetWorldCenter().x, player.GetWorldCenter().y, "ranged");
 					z[i].delay = 0;
+				}
+			}
+			//Only runs for the lobber zombies that are not fed and are in position
+			if (z[i].type == "lobber") {
+				if (z[i].lobberReady) {
+					z[i].delay += 1000 / frameRate;
+					//Fires if the delay is greater than the fire rate calculation
+					if (z[i].delay >= 1000 / z[i].fireRate) {
+						shootProjectile(z[i], Math.random() * ((gameWidth / 30) - z[i].aoeSize), Math.random() * ((gameHeight / 30) - z[i].aoeSize), "lobber");
+						z[i].delay = 0;
+					}
 				}
 			}
 		}
@@ -1123,14 +1239,55 @@ function projectileManagement() {
 	}
 }
 
-function shootProjectile(zombieObject) {
+function createAoESegment(damage, size, time, clickX, clickY) {
 	var canvas = document.getElementById("gameArea").getBoundingClientRect();
-	var clickX = player.GetWorldCenter().x;
-	var clickY = player.GetWorldCenter().y;
+	var accuracyMulti = 1.0;
+
+	//Finds the next available spot in the areaSegment array to create a new projectile object
+	var i = 0;
+	while (i < as.length) {
+		if (as[i] == null || as[i] == "fed") {
+			break;
+		}
+		else {
+			i++;
+		}
+	}
+
+	//Only continues if there is a spot available in the projectiles array and if the player has health
+	if (i < as.length && playerHealth > 0) {
+
+		//Creates a projectile object in the projectile array
+		as[i] = new AoESegment(damage, size * scale, time, gameArea);
+
+		var def = new b2BodyDef;
+		def.type = b2Body.b2_dynamicBody;
+		def.position.x = clickX;
+		def.position.y = clickY;
+
+		var fix = new b2FixtureDef;
+		fix.density = Math.PI / (Math.PI * Math.pow(p[i].size, 2));
+		fix.friction = 0;
+		fix.restitution = 0;
+		fix.shape = new b2CircleShape(p[i].size);
+		fix.filter.groupIndex = -1;
+
+		as[i].body = world.CreateBody(def);
+		as[i].body.CreateFixture(fix);
+
+	}
+
+	else if (playerHealth > 0) {
+		console.log("ERROR: AreaSegment array limit reached");
+	}
+}
+
+function shootProjectile(zombieObject, clickX, clickY, type) {
+	var canvas = document.getElementById("gameArea").getBoundingClientRect();
 	var distance  = Math.sqrt(Math.pow(zombieObject.body.GetWorldCenter().x - clickX, 2) + Math.pow(zombieObject.body.GetWorldCenter().y - clickY, 2));
 	var accuracyMulti = 1.0;
 
-	//Finds the next avalible spot in the projectiles array to create a new projectile object
+	//Finds the next available spot in the projectiles array to create a new projectile object
 	var i = 0;
 	while (i < p.length) {
 		if (p[i] == null || p[i] == "fed") {
@@ -1141,12 +1298,23 @@ function shootProjectile(zombieObject) {
 		}
 	}
 
-	//Only continues if there is a spot availble in the projectiles array and if the player has health
+	//Only continues if there is a spot available in the projectiles array and if the player has health
 	if (i < p.length && playerHealth > 0) {
 
-		//Creates a projectile object in the projectile array
-		p[i] = new Marshmellow(zombieObject.rangedDamage, 25 * scale, 0.35 * scale, gameArea);
-		accuracyMulti = (1 - 0.6);
+		if (type === "ranged") {
+			//Creates a projectile object in the projectile array
+			p[i] = new Marshmellow(zombieObject.rangedDamage, 25 * scale, 0.35 * scale, gameArea);
+			accuracyMulti = (1 - 0.6);
+		}
+		else if (type === "lobber") {
+			//Creates a projectile object in the projectile array
+			p[i] = new LobberMarshmellow(zombieObject.rangedDamage, 50 * scale, 0.35 * scale, gameArea, clickX, clickY, zombieObject.aoeSize, zombieObject.aoeTime, zombieObject);
+			accuracyMulti = (1 - 1.0);
+		}
+		else {
+			console.log("ERROR: Projectile type not found");
+		}
+
 
 
 		//Calculates the coordinates at distance 16 from the world center accorcding to where the clicked point is
@@ -1166,10 +1334,16 @@ function shootProjectile(zombieObject) {
 		fix.density = Math.PI / (Math.PI * Math.pow(p[i].size, 2));
 		fix.friction = 0;
 		fix.restitution = 0;
+		if (type === "lobber") {
+			fix.filter.categoryBits= 0x0004;
+		}
 		fix.shape = new b2CircleShape(p[i].size);
 		fix.filter.groupIndex = -1;
+
+
 		p[i].body = world.CreateBody(def);
 		p[i].body.CreateFixture(fix);
+
 
 		//Following code determiens the velocity to give the marshmellow
 		var multiplier = 0.0; // Used to set the less needed axis velocity to a fraction of the most needed
@@ -1190,7 +1364,7 @@ function shootProjectile(zombieObject) {
 
 		p[i].body.ApplyImpulse(new b2Vec2(-1 * multiplier * xaxis * (1 - (0.29289 * offset)), -1 * multiplier * yaxis * (1 - (0.29289 * offset))), p[i].body.GetWorldCenter());
 	}
-	else {
+	else if (playerHealth > 0) {
 		console.log("ERROR: Marshmellow array limit reached");
 	}
 }

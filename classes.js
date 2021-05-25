@@ -1,5 +1,5 @@
 class Zombie {
-	constructor(type, health, damage, speed, size, experence, preferedDistance, fireRate, rangedDamage, damageType, xpos, ypos, color, canvasName) {
+	constructor(type, health, damage, speed, size, experence, preferedDistance, fireRate, rangedDamage, damageType, xpos, ypos, color, aoeSize, aoeTime, canvasName) {
 		this.type = type;
 		this.health = health;
 		this.maxHealth = health;
@@ -23,6 +23,9 @@ class Zombie {
 		this.rangedDamage = rangedDamage;
 		this.damageType = damageType;
 		this.delay = 0.0;
+		this.aoeSize = aoeSize;
+		this.aoeTime = aoeTime;
+		this.lobberReady = false;
 		this.body; //Used to store the body object from box2d
 		this.html = "<div></div>";  //Used to store the html for health bars
 	}
@@ -56,6 +59,54 @@ class CanvasText {
 		ctx.font = scale + "em Bungee";
 		ctx.fillStyle = "red";
 		ctx.fillText(this.text, this.startingPosX - (ctx.measureText(this.text).width / 2), this.startingPosY + (canvasHeight * 0.06) - this.verticalMovement * (this.startingTime - this.displayTime / this.startingTime));
+	}
+}
+
+class AoESegment {
+	constructor(damage, size, aoeTime, canvasName) {
+		this.damage = damage;
+		this.size = size;
+		this.aoeTime = aoeTime;
+		this.canvasName = canvasName;
+		this.body; //Used to store the body object from box2d
+	}
+
+	newPos(posX, posY, color) {
+		var ctx = this.canvasName.getContext("2d");
+		ctx.beginPath();
+		ctx.arc(posX * 30, posY * 30, this.size * 30, 0, 2 * Math.PI);
+		ctx.fillStyle = color;
+		ctx.fill();
+	}
+}
+
+class Marshmellow {
+	constructor(damage, speed, size, canvasName) {
+		this.damage = damage;
+		this.speed = speed;
+		this.type = "ranged";
+		this.size = size;
+		this.canvasName = canvasName;
+		this.body; //Used to store the body object from box2d
+	}
+
+	newPos(posX, posY, color) {
+		var ctx = this.canvasName.getContext("2d");
+		ctx.beginPath();
+		ctx.arc(posX * 30, posY * 30, this.size * 30, 0, 2 * Math.PI);
+		ctx.fillStyle = color;
+		ctx.fill();
+	}
+}
+
+class LobberMarshmellow extends Marshmellow {
+	constructor(damage, speed, size, canvasName, finalX, finalY, aoeSize, aoeTime) {
+		super(damage, speed, size, canvasName);
+		this.finalX = finalX;
+		this.finalY = finalY;
+		this.aoeSize = aoeSize
+		this.aoeTime = aoeTime;
+		this.type = "lobber";
 	}
 }
 
@@ -294,25 +345,6 @@ class Armor {
 	}
 }
 
-class Marshmellow {
-	constructor(damage, speed, size, canvasName) {
-		this.damage = damage;
-		this.speed = speed;
-		this.size = size;
-		this.canvasName = canvasName;
-		this.body; //Used to store the body object from box2d
-	}
-
-	newPos(posX, posY, color) {
-		var ctx = this.canvasName.getContext("2d");
-		ctx.beginPath();
-		ctx.arc(posX * 30, posY * 30, this.size * 30, 0, 2 * Math.PI);
-		ctx.fillStyle = color;
-		ctx.fill();
-	}
-}
-
-
 class PlayRender {
 	constructor(size, color, canvasName) {
 		this.size = size;
@@ -328,7 +360,6 @@ class PlayRender {
 		ctx.fill();
 	}
 }
-
 
 //Stores stats for a specific type of marshmellow gun
 class MarshmellowGun {
