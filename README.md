@@ -1,3 +1,8 @@
+## No Longer Maintained
+This game is no longer being worked on. While I love the concept of the game, my programming skills have substantially improved since
+the time I was working on this game in college. Instead of writing new code for the project, I'd rather start from scratch using
+signifigantly better programming practicies and a different language than JavaScript.
+
 # Huggable Zombies
 ## A web based top-down game where you can feed zombies marshmallows
 
