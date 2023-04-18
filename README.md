@@ -52,12 +52,3 @@ Game Boarder - The edges of the game area.  If the protagonist goes outside of t
 
 ## To play the game
 Simply download the game files and launch the HuggableZombies.html file.
-
-## Copyright
-Copyright of Steven Eldridge<br>
-Email: eldridge33333@gmail.com<br>
-Github: https://github.com/StevenEldridge/HuggableZombies <br>
-Huggable Zombies and all associated code except "Box2D.js" is copyright of Steven Eldridge and protected under the
-Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.  You may display and share an
-unmodified version of Huggable Zombies in a non-commercial setting as long as you give me credit.
-Sharing my name, email, and providing a link to my Github page counts as sufficient credit. Go [here](https://creativecommons.org/licenses/by-nc-nd/4.0/) to learn more.
